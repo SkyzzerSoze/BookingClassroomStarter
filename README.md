@@ -31,47 +31,47 @@ npm install yup @hookform/resolvers
 
 ### Niveau 1 - Configuration des écrans et de la navigation
 
-- [ ] Configuration du projet et installation des dépendances
-- [ ] Mise en place de la navigation (Stack et Tab)
+- [ o ] Configuration du projet et installation des dépendances
+- [ o ] Mise en place de la navigation (Stack et Tab)
 
 ### Niveau 2 - Premier appel API
 
-- [ ] Configuration des appels API pour les salles de classe
-- [ ] Affichage de la liste des classes
+- [ o ] Configuration des appels API pour les salles de classe
+- [ o ] Affichage de la liste des classes
 
 ### Niveau 3 - Authentification
 
-- [ ] Création des écrans de base (Login, Register)
-- [ ] Implémentation de l'authentification (login/register)
+- [ register a faire] Création des écrans de base (Login, Register)
+- [ register a faire] Implémentation de l'authentification (login/register)
 
 ### Niveau 4 - Context
 
-- [ ] Création d'un context pour l'authentification
-- [ ] Gestion du stockage du token avec AsyncStorage
+- [ o ] Création d'un context pour l'authentification
+- [ o ] Gestion du stockage du token avec AsyncStorage
 
 ### Niveau 5 - Profil utilisateur
 
-- [ ] Création de l'écran de profil
-- [ ] Affichage des informations de l'utilisateur
-- [ ] Possibilité de modifier ses informations
+- [ n ] Création de l'écran de profil
+- [ n ] Affichage des informations de l'utilisateur
+- [ n ] Possibilité de modifier ses informations
 
 ### Niveau 6 - Apparence et fonctionnalités avancées
 
-- [ ] Création du composant Card pour les salles
-- [ ] Création de l'écran de détails d'une salle
-- [ ] Afficher la liste des réservations pour une salle
-- [ ] Ajouter un bouton pour réserver une salle
+- [ n ] Création du composant Card pour les salles
+- [ n ] Création de l'écran de détails d'une salle
+- [ n ] Afficher la liste des réservations pour une salle
+- [ n ] Ajouter un bouton pour réserver une salle
 
 ### Niveau 7 - Gestion des réservations pour l'utilisateur
 
-- [ ] Création de l'écran de gestion des réservations
-- [ ] Affichage des réservations en cours et passées
-- [ ] Possibilité de supprimer une réservation
+- [ n ] Création de l'écran de gestion des réservations
+- [ n ] Affichage des réservations en cours et passées
+- [ n ] Possibilité de supprimer une réservation
 
 ### Niveau 8 - Amélioration de l'expérience utilisateur
 
-- [ ] Ajout de la possibilité de filtrer les salles (par nom, par capacité, etc.)
-- [ ] Ajout la possibilité de réordonner les salles dans la liste (par nom, par capacité, etc.)
+- [ n ] Ajout de la possibilité de filtrer les salles (par nom, par capacité, etc.)
+- [ n ] Ajout la possibilité de réordonner les salles dans la liste (par nom, par capacité, etc.)
 
 ## Endpoints d'API
 
