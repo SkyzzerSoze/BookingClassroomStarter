@@ -18,12 +18,22 @@ const useAuth = () => {
     }
   };
 
+  const register = async (data: any) => {
+    try {
+      const response = await AuthService.register(data);
+      setUser(response.user);
+      saveToken(response.token);
+    } catch (error) {
+      console.error("Erreur d'inscription :", error);
+    }
+  };
+
   const signout = async () => {
     setUser(null);
     removeToken();
   };
 
-  return { user, signin, signout };
+  return { user, signin, signout, register };
 };
 
 export default useAuth;
