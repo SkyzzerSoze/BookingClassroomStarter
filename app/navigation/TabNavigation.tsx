@@ -1,4 +1,4 @@
-import ClassroomsScreen from "../screens/ClassroomsScreen";
+import ClassroomStack from "./ClassroomStack"; // <-- import de la stack
 import ProfilScreen from "../screens/ProfilScreen";
 import ReservationsScreen from "../screens/ReservationsScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -25,7 +25,7 @@ const TabNavigation = () => {
 
   return (
     <Tab.Navigator initialRouteName="Profil" screenOptions={screenOptions}>
-      <Tab.Screen name="Classrooms" component={ClassroomsScreen} />
+      <Tab.Screen name="Classrooms" component={ClassroomStack} />
       <Tab.Screen name="Reservations" component={ReservationsScreen} />
       <Tab.Screen name="Profil" component={ProfilScreen} />
     </Tab.Navigator>
