@@ -1,32 +1,41 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Card } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import ClassroomCard from "../components/classrooms/ClassroomsCard";
+import { useNavigation } from "@react-navigation/native";
+import { Text } from "react-native-paper";
 
 const ClassroomsScreen = () => {
   const [classrooms, setClassrooms] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    console.log("ClassroomsScreen useEffect");
     fetchAllClassrooms();
   }, []);
 
   const fetchAllClassrooms = async () => {
-    const response = await fetch("http://localhost:8000/api/classrooms");
-    const data = await response.json();
-    console.log(data);
-    setClassrooms(data);
+    try {
+      const response = await fetch("http://localhost:8000/api/classrooms");
+      const data = await response.json();
+      setClassrooms(data);
+    } catch (error) {
+      console.error("Erreur lors du chargement des salles :", error);
+    }
+  };
+
+  const handleClassroomPress = (id: string) => {
+    navigation.navigate("ClassroomDetail", { id });
   };
 
   return (
-    <View>
+    <View style={styles.container}>
+      <Text style={styles.title}>Liste des salles</Text>
       <View style={styles.classroomsContainer}>
         {classrooms.map((classroom) => (
-          <Card key={classroom.id}>
-            <Card.Title title={classroom.name} titleStyle={styles.cardTitle} />
-            <Card.Content>
-              <Text>{classroom.capacity}</Text>
-            </Card.Content>
-          </Card>
+          <ClassroomCard
+            key={classroom.id}
+            classroom={classroom}
+            onPress={() => handleClassroomPress(classroom.id)}
+          />
         ))}
       </View>
     </View>
@@ -36,19 +45,16 @@ const ClassroomsScreen = () => {
 export default ClassroomsScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
-    color: "blue",
+    marginBottom: 16,
   },
   classroomsContainer: {
-    flexDirection: "column",
-    gap: 10,
-    padding: 10,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "blue",
+    gap: 12,
   },
 });

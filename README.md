@@ -51,9 +51,9 @@ npm install yup @hookform/resolvers
 
 ### Niveau 5 - Profil utilisateur
 
-- [ n ] Création de l'écran de profil
-- [ n ] Affichage des informations de l'utilisateur
-- [ n ] Possibilité de modifier ses informations
+- [ o ] Création de l'écran de profil
+- [ o ] Affichage des informations de l'utilisateur
+- [ o ] Possibilité de modifier ses informations
 
 ### Niveau 6 - Apparence et fonctionnalités avancées
 
