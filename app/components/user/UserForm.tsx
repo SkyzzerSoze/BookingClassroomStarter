@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Button, TextInput } from "react-native-paper";
+import { useState } from "react";
 
 const UserForm = () => {
   const [credentials, setCredentials] = useState({
@@ -9,32 +9,42 @@ const UserForm = () => {
     name: "",
   });
 
-  const handleChange = (key: string, value: string) => {
-    setCredentials({ ...credentials, [key]: value });
+  const handleChange = (name: string, value: string) => {
+    setCredentials({ ...credentials, [name]: value });
   };
 
   const handleSubmit = () => {
-    console.log("credentials : ", credentials);
+    console.log("Submitted data:", credentials);
   };
 
   return (
-    <View style={{ gap: 10 }}>
+    <View style={styles.container}>
       <TextInput
         label="Email"
+        mode="outlined"
         value={credentials.email}
         onChangeText={(value) => handleChange("email", value)}
+        style={styles.input}
       />
+
       <TextInput
         label="Password"
+        mode="outlined"
+        secureTextEntry
         value={credentials.password}
         onChangeText={(value) => handleChange("password", value)}
+        style={styles.input}
       />
+
       <TextInput
         label="Name"
+        mode="outlined"
         value={credentials.name}
         onChangeText={(value) => handleChange("name", value)}
+        style={styles.input}
       />
-      <Button mode="contained" onPress={handleSubmit}>
+
+      <Button mode="contained" onPress={handleSubmit} style={styles.button}>
         Submit
       </Button>
     </View>
@@ -42,3 +52,17 @@ const UserForm = () => {
 };
 
 export default UserForm;
+
+const styles = StyleSheet.create({
+  container: {
+    gap: 10,
+    marginBottom: 20,
+  },
+  input: {
+    backgroundColor: "#fff",
+  },
+  button: {
+    marginTop: 10,
+  },
+});
+
