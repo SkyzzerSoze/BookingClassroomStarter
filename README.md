@@ -41,7 +41,7 @@ npm install yup @hookform/resolvers
 
 ### Niveau 3 - Authentification
 
-- [ register a faire] Création des écrans de base (Login, Register)
+- [ o ] Création des écrans de base (Login, Register)
 - [ register a faire] Implémentation de l'authentification (login/register)
 
 ### Niveau 4 - Context

@@ -4,14 +4,12 @@ import AuthContext from "../context/AuthContext";
 import { removeToken, saveToken } from "../utils/token-jwt";
 
 const useAuth = () => {
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, loading } = useContext(AuthContext);
 
   const signin = async (credentials: any) => {
     try {
       const response = await AuthService.signin(credentials);
-      // console.log("response : ", response);
       setUser(response.user);
-      // save token in async storage
       saveToken(response.token);
     } catch (error) {
       console.error(error);
@@ -33,7 +31,7 @@ const useAuth = () => {
     removeToken();
   };
 
-  return { user, signin, signout, register };
+  return { user, setUser, loading, signin, signout, register };
 };
 
 export default useAuth;
