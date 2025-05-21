@@ -57,10 +57,10 @@ npm install yup @hookform/resolvers
 
 ### Niveau 6 - Apparence et fonctionnalités avancées
 
-- [ n ] Création du composant Card pour les salles
-- [ n ] Création de l'écran de détails d'une salle
-- [ n ] Afficher la liste des réservations pour une salle
-- [ n ] Ajouter un bouton pour réserver une salle
+- [ o ] Création du composant Card pour les salles
+- [ o ] Création de l'écran de détails d'une salle
+- [ o ] Afficher la liste des réservations pour une salle
+- [ o ] Ajouter un bouton pour réserver une salle
 
 ### Niveau 7 - Gestion des réservations pour l'utilisateur
 

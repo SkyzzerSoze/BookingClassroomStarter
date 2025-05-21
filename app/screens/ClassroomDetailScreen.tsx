@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Platform } from "react-native";
 import { Text, Card, Button } from "react-native-paper";
 import { useRoute } from "@react-navigation/native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import useAuth from "../hooks/useAuth";
 
 const ClassroomDetailScreen = () => {
   const route = useRoute();
   const { id } = route.params as { id: string };
+  const { user } = useAuth();
 
   const [classroom, setClassroom] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [start, setStart] = useState(new Date());
+  const [end, setEnd] = useState(new Date());
+  const [showStartPicker, setShowStartPicker] = useState(false);
+  const [showEndPicker, setShowEndPicker] = useState(false);
+  const [reserving, setReserving] = useState(false);
 
   useEffect(() => {
     fetchClassroom();
@@ -23,6 +31,35 @@ const ClassroomDetailScreen = () => {
       console.error("Erreur lors du chargement de la salle :", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleReservation = async () => {
+    try {
+      setReserving(true);
+      const res = await fetch(`http://localhost:8000/api/reservations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          classroomId: classroom.id,
+          start,
+          end,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) throw new Error(result.message || "Erreur lors de la réservation");
+
+      // Recharger la salle pour afficher la nouvelle réservation
+      fetchClassroom();
+    } catch (error) {
+      console.error("Erreur réservation :", error);
+    } finally {
+      setReserving(false);
     }
   };
 
@@ -58,7 +95,47 @@ const ClassroomDetailScreen = () => {
         <Text>Aucune réservation pour cette salle.</Text>
       )}
 
-      <Button mode="contained" style={styles.button} onPress={() => {}}>
+      {/* Sélection de dates */}
+      <View style={styles.datePickers}>
+        <Button mode="outlined" onPress={() => setShowStartPicker(true)}>
+          Choisir date de début : {start.toLocaleString()}
+        </Button>
+        <Button mode="outlined" onPress={() => setShowEndPicker(true)}>
+          Choisir date de fin : {end.toLocaleString()}
+        </Button>
+      </View>
+
+      {showStartPicker && (
+        <DateTimePicker
+          value={start}
+          mode="datetime"
+          display={Platform.OS === "ios" ? "spinner" : "default"}
+          onChange={(_, selectedDate) => {
+            setShowStartPicker(false);
+            if (selectedDate) setStart(selectedDate);
+          }}
+        />
+      )}
+
+      {showEndPicker && (
+        <DateTimePicker
+          value={end}
+          mode="datetime"
+          display={Platform.OS === "ios" ? "spinner" : "default"}
+          onChange={(_, selectedDate) => {
+            setShowEndPicker(false);
+            if (selectedDate) setEnd(selectedDate);
+          }}
+        />
+      )}
+
+      <Button
+        mode="contained"
+        style={styles.button}
+        onPress={handleReservation}
+        loading={reserving}
+        disabled={reserving}
+      >
         Réserver cette salle
       </Button>
     </ScrollView>
@@ -89,5 +166,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  datePickers: {
+    gap: 10,
+    marginTop: 20,
   },
 });
