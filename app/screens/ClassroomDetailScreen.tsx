@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView, Platform } from "react-native";
-import { Text, Card, Button } from "react-native-paper";
+import { View, StyleSheet, ScrollView } from "react-native";
+import { Text, Card, Button, TextInput } from "react-native-paper";
 import { useRoute } from "@react-navigation/native";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import useAuth from "../hooks/useAuth";
+import ReservationService from "../services/reservation.service";
 
 const ClassroomDetailScreen = () => {
   const route = useRoute();
@@ -12,11 +12,9 @@ const ClassroomDetailScreen = () => {
 
   const [classroom, setClassroom] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [start, setStart] = useState(new Date());
-  const [end, setEnd] = useState(new Date());
-  const [showStartPicker, setShowStartPicker] = useState(false);
-  const [showEndPicker, setShowEndPicker] = useState(false);
-  const [reserving, setReserving] = useState(false);
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
+  const [resLoading, setResLoading] = useState(false);
 
   useEffect(() => {
     fetchClassroom();
@@ -35,31 +33,20 @@ const ClassroomDetailScreen = () => {
   };
 
   const handleReservation = async () => {
+    setResLoading(true);
     try {
-      setReserving(true);
-      const res = await fetch(`http://localhost:8000/api/reservations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({
-          classroomId: classroom.id,
-          start,
-          end,
-        }),
+      await ReservationService.createReservation({
+        classroomId: id,
+        start,
+        end,
       });
-
-      const result = await res.json();
-
-      if (!res.ok) throw new Error(result.message || "Erreur lors de la réservation");
-
-      // Recharger la salle pour afficher la nouvelle réservation
-      fetchClassroom();
+      fetchClassroom(); // Rafraîchit la liste des réservations
+      setStart("");
+      setEnd("");
     } catch (error) {
-      console.error("Erreur réservation :", error);
+      console.error("Erreur de réservation :", error);
     } finally {
-      setReserving(false);
+      setResLoading(false);
     }
   };
 
@@ -81,7 +68,7 @@ const ClassroomDetailScreen = () => {
       </Card>
 
       <Text style={styles.subtitle}>Réservations :</Text>
-      {classroom.reservations && classroom.reservations.length > 0 ? (
+      {classroom.reservations?.length ? (
         classroom.reservations.map((res: any) => (
           <Card key={res.id} style={styles.reservationCard}>
             <Card.Content>
@@ -92,49 +79,27 @@ const ClassroomDetailScreen = () => {
           </Card>
         ))
       ) : (
-        <Text>Aucune réservation pour cette salle.</Text>
+        <Text>Aucune réservation.</Text>
       )}
 
-      {/* Sélection de dates */}
-      <View style={styles.datePickers}>
-        <Button mode="outlined" onPress={() => setShowStartPicker(true)}>
-          Choisir date de début : {start.toLocaleString()}
-        </Button>
-        <Button mode="outlined" onPress={() => setShowEndPicker(true)}>
-          Choisir date de fin : {end.toLocaleString()}
-        </Button>
-      </View>
-
-      {showStartPicker && (
-        <DateTimePicker
-          value={start}
-          mode="datetime"
-          display={Platform.OS === "ios" ? "spinner" : "default"}
-          onChange={(_, selectedDate) => {
-            setShowStartPicker(false);
-            if (selectedDate) setStart(selectedDate);
-          }}
-        />
-      )}
-
-      {showEndPicker && (
-        <DateTimePicker
-          value={end}
-          mode="datetime"
-          display={Platform.OS === "ios" ? "spinner" : "default"}
-          onChange={(_, selectedDate) => {
-            setShowEndPicker(false);
-            if (selectedDate) setEnd(selectedDate);
-          }}
-        />
-      )}
-
+      <Text style={styles.subtitle}>Nouvelle réservation :</Text>
+      <TextInput
+        label="Début (YYYY-MM-DD HH:MM)"
+        value={start}
+        onChangeText={setStart}
+        style={{ marginBottom: 10 }}
+      />
+      <TextInput
+        label="Fin (YYYY-MM-DD HH:MM)"
+        value={end}
+        onChangeText={setEnd}
+        style={{ marginBottom: 10 }}
+      />
       <Button
         mode="contained"
-        style={styles.button}
         onPress={handleReservation}
-        loading={reserving}
-        disabled={reserving}
+        loading={resLoading}
+        disabled={resLoading || !start || !end}
       >
         Réserver cette salle
       </Button>
@@ -145,30 +110,9 @@ const ClassroomDetailScreen = () => {
 export default ClassroomDetailScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
-  card: {
-    marginBottom: 16,
-  },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginVertical: 10,
-  },
-  reservationCard: {
-    marginBottom: 10,
-  },
-  button: {
-    marginTop: 20,
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  datePickers: {
-    gap: 10,
-    marginTop: 20,
-  },
+  container: { padding: 16 },
+  card: { marginBottom: 16 },
+  subtitle: { fontSize: 18, fontWeight: "bold", marginVertical: 10 },
+  reservationCard: { marginBottom: 10 },
+  center: { flex: 1, justifyContent: "center", alignItems: "center" },
 });

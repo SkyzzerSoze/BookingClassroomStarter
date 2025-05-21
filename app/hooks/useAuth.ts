@@ -9,17 +9,25 @@ const useAuth = () => {
   const signin = async (credentials: any) => {
     try {
       const response = await AuthService.signin(credentials);
-      setUser(response.user);
+      const userWithToken = {
+        ...response.user,
+        token: response.token,
+      };
+      setUser(userWithToken);
       saveToken(response.token);
     } catch (error) {
-      console.error(error);
+      console.error("Erreur lors de la connexion :", error);
     }
   };
 
   const register = async (data: any) => {
     try {
       const response = await AuthService.register(data);
-      setUser(response.user);
+      const userWithToken = {
+        ...response.user,
+        token: response.token,
+      };
+      setUser(userWithToken);
       saveToken(response.token);
     } catch (error) {
       console.error("Erreur d'inscription :", error);
