@@ -64,9 +64,9 @@ npm install yup @hookform/resolvers
 
 ### Niveau 7 - Gestion des réservations pour l'utilisateur
 
-- [ n ] Création de l'écran de gestion des réservations
-- [ n ] Affichage des réservations en cours et passées
-- [ n ] Possibilité de supprimer une réservation
+- [ 0 ] Création de l'écran de gestion des réservations
+- [ 0 ] Affichage des réservations en cours et passées
+- [ 0 ] Possibilité de supprimer une réservation
 
 ### Niveau 8 - Amélioration de l'expérience utilisateur
 
