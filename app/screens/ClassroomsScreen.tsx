@@ -8,6 +8,7 @@ const ClassroomsScreen = () => {
   const [classrooms, setClassrooms] = useState([]);
   const [filteredClassrooms, setFilteredClassrooms] = useState([]);
   const [filterText, setFilterText] = useState("");
+  const [minCapacity, setMinCapacity] = useState(""); // Ajout du filtre capacité
   const [sortBy, setSortBy] = useState<"name" | "capacity" | null>(null);
 
   const navigation = useNavigation();
@@ -18,14 +19,14 @@ const ClassroomsScreen = () => {
 
   useEffect(() => {
     applyFilterAndSort();
-  }, [classrooms, filterText, sortBy]);
+  }, [classrooms, filterText, minCapacity, sortBy]);
 
   const fetchAllClassrooms = async () => {
     try {
       const response = await fetch("http://localhost:8000/api/classrooms");
       const data = await response.json();
       setClassrooms(data);
-      setFilteredClassrooms(data); // Initialisation de la liste affichée
+      setFilteredClassrooms(data);
     } catch (error) {
       console.error("Erreur lors du chargement des salles :", error);
     }
@@ -39,6 +40,14 @@ const ClassroomsScreen = () => {
       data = data.filter((c) =>
         c.name.toLowerCase().includes(filterText.toLowerCase())
       );
+    }
+
+    // Filtrer par capacité minimale
+    if (minCapacity) {
+      const min = parseInt(minCapacity, 10);
+      if (!isNaN(min)) {
+        data = data.filter((c) => c.capacity >= min);
+      }
     }
 
     // Trier
@@ -71,6 +80,13 @@ const ClassroomsScreen = () => {
         label="Filtrer par nom"
         value={filterText}
         onChangeText={setFilterText}
+        style={{ marginBottom: 12 }}
+      />
+      <TextInput
+        label="Capacité minimale"
+        value={minCapacity}
+        onChangeText={setMinCapacity}
+        keyboardType="numeric"
         style={{ marginBottom: 12 }}
       />
 
